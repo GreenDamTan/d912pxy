@@ -682,12 +682,15 @@ d912pxy_hlsl_generator_regtext d912pxy_hlsl_generator::FormatDstModifier(d912pxy
 	switch (GetDstModifier(dstOp))
 	{
 	case 0x0:
+	case 0x2:
 		sprintf(ret.t, "%s", statement.t);
 		break;
 	case 0x1:
+	case 0x3:
 		sprintf(ret.t, "saturate(%s)", statement.t);
 		break;
-	case 0x2:
+	//megai2: ignore half precision
+	/*case 0x2:
 		if (dstLen > 1)
 			sprintf(ret.t, "(half%u)(%s)", dstLen, statement.t);
 		else
@@ -698,7 +701,7 @@ d912pxy_hlsl_generator_regtext d912pxy_hlsl_generator::FormatDstModifier(d912pxy
 			sprintf(ret.t, "saturate((half%u)(%s))", dstLen, statement.t);
 		else
 			sprintf(ret.t, "saturate((half)(%s))", statement.t);
-		break;
+		break;*/
 	default:
 		m_log->P7_ERROR(LGC_DEFAULT, TM("hlsl generator not support %08lX dst mod"), (dstOp >> 20) & 0xF);
 		LOG_ERR_THROW2(-1, "hlsl generator not support passed dst modifier");

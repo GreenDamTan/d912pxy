@@ -241,23 +241,23 @@ void d912pxy_resource::UpdateDescCache()
 
 void d912pxy_resource::EvictFromGPU()
 {
-	if (!evicted)
+/*	if (!evicted)
 	{
 		ID3D12Pageable* mr = (ID3D12Pageable*)m_res.Get();
 		d912pxy_helper::ThrowIfFailed(d912pxy_s(DXDev)->Evict(1, &mr), "Evict");
 		evicted = 1;
-	}
+	}*/
 }
 
 void d912pxy_resource::MakeGPUResident()
 {
-	if (!evicted)
+	/*if (!evicted)
 		return;
 
 	ID3D12Pageable* mr = (ID3D12Pageable*)m_res.Get();
 	d912pxy_s(DXDev)->MakeResident(1, &mr);
 
-	evicted = 0;
+	evicted = 0;*/
 }
 
 void d912pxy_resource::AsyncBufferCopy(d912pxy_upload_item* src, UINT offset, UINT size, ID3D12GraphicsCommandList* cl)

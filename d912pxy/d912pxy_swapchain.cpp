@@ -25,7 +25,7 @@ SOFTWARE.
 #include "stdafx.h"
 #include "d912pxy_swapchain.h"
 
-#define DXGI_SOFT_THROW(a, msg, ...) if (FAILED(a)) { LOG_ERR_DTDM(msg, __VA_ARGS__); LOG_ERR_DTDM("HR: %08lX", a); state = SWCS_INIT_ERROR; return D3D_OK; }
+#define DXGI_SOFT_THROW(a, msg, ...) { HRESULT eret = a; if (FAILED(eret)) { LOG_ERR_DTDM(msg, __VA_ARGS__); LOG_ERR_DTDM("HR: %08lX", eret); state = SWCS_INIT_ERROR; return D3D_OK; } }
 
 d912pxy_swapchain::d912pxy_swapchain(d912pxy_device * dev, int index, D3DPRESENT_PARAMETERS * in_pp) : d912pxy_comhandler(dev, L"swap chain")
 {
@@ -33,6 +33,7 @@ d912pxy_swapchain::d912pxy_swapchain(d912pxy_device * dev, int index, D3DPRESENT
 	depthStencilSurface = NULL;
 	backBufferSurface = NULL;
 	swapCheckValue = D3D_OK;
+	dxgiNoWaitFlag = DXGI_PRESENT_DO_NOT_WAIT;
 	errorCount = 0;
 
 	currentPP = *in_pp;
@@ -454,6 +455,10 @@ HRESULT d912pxy_swapchain::SwapHandle_Swappable()
 
 	if (!((ret == DXGI_ERROR_WAS_STILL_DRAWING) || (ret == S_OK)))
 	{
+		//megai2: disable no wait flag and drop back to blocking call if we catch an error, 
+		//should fix vrr monitors behaivour on FPS > maxRefreshRate
+		dxgiNoWaitFlag = 0;
+		LOG_ERR_DTDM("error: %llX", ret);
 		ChangeState(SWCS_SWAP_ERROR);
 	}
 		
@@ -473,6 +478,7 @@ HRESULT d912pxy_swapchain::SwapHandle_Swappable_Exclusive()
 		ChangeState(SWCS_FOCUS_LOST_SWITCH);
 	} else if (FAILED(ret))
 	{
+		LOG_ERR_DTDM("error: %llX", ret);
 		ChangeState(SWCS_SWAP_ERROR);
 	}	
 
@@ -591,7 +597,7 @@ HRESULT d912pxy_swapchain::InitDXGISwapChain()
 	{
 		dxgiResizeFlags |= dxgiTearingSupported ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
 		dxgiPresentFlags |= dxgiTearingSupported ? DXGI_PRESENT_ALLOW_TEARING : 0;
-		dxgiPresentFlags |= DXGI_PRESENT_DO_NOT_WAIT;
+		dxgiPresentFlags |= dxgiNoWaitFlag;
 	}
 	else {
 		dxgiResizeFlags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;

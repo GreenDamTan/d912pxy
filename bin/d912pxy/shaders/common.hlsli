@@ -80,12 +80,12 @@ struct heapIndexes
 
 #define texState batchData
 
-Texture2DArray 					textureBinds[]  : register(t0, space0);
-TextureCube 					textureBindsCubed[]  : register(t0, space1);
-sampler      					samplerBinds[]  : register(s0);
+Texture2DArray 					textureBinds[16000]  : register(t0);
+TextureCube 					textureBindsCubed[16000]  : register(t16000);
+sampler      					samplerBinds[64]  : register(s0);
 ConstantBuffer<batchDataType> batchData : register(b0);
 
-SamplerComparisonState ShadowSampler : register(s0, space1);
+SamplerComparisonState ShadowSampler : register(s64);
 
 float4 getPassedVSFv(uint idx)
 {

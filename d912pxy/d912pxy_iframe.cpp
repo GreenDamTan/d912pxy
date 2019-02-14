@@ -617,11 +617,11 @@ void d912pxy_iframe::InitRootSignature()
 	ranges[0].OffsetInDescriptorsFromTableStart = 0;
 	ranges[0].RegisterSpace = 0;
 
-	ranges[1].BaseShaderRegister = 0;
+	ranges[1].BaseShaderRegister = mHeaps[PXY_INNER_HEAP_SRV]->GetDesc()->NumDescriptors;
 	ranges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	ranges[1].NumDescriptors = mHeaps[PXY_INNER_HEAP_SRV]->GetDesc()->NumDescriptors;
 	ranges[1].OffsetInDescriptorsFromTableStart = 0;
-	ranges[1].RegisterSpace = 1;
+	ranges[1].RegisterSpace = 0;
 
 	ranges[2].BaseShaderRegister = 0;
 	ranges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
@@ -673,8 +673,8 @@ void d912pxy_iframe::InitRootSignature()
 	staticPCF.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
 	staticPCF.ComparisonFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 	staticPCF.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
-	staticPCF.RegisterSpace = 1;
-	staticPCF.ShaderRegister = 0;
+	staticPCF.RegisterSpace = 0;
+	staticPCF.ShaderRegister = mHeaps[PXY_INNER_HEAP_SPL]->GetDesc()->NumDescriptors;
 	staticPCF.MaxAnisotropy = 1;
 	staticPCF.MaxLOD = 0;
 	staticPCF.MinLOD = 0;

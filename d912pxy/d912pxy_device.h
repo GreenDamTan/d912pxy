@@ -220,6 +220,8 @@ private:
 
 	void* initPtr;
 
+	IDirect3DBaseTexture9* tmpTextureTrack[32];
+
 #ifdef PERFORMANCE_GRAPH_WRITE	
 	d912pxy_performance_graph* perfGraph;
 #endif

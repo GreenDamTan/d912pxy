@@ -30,6 +30,9 @@ using namespace Microsoft::WRL;
 
 d912pxy_device::d912pxy_device(IDirect3DDevice9* dev, void* par) : d912pxy_comhandler(L"device")
 {
+	for (int i = 0; i != 32; ++i)
+		tmpTextureTrack[i] = NULL;
+
 	d912pxy_s(dev) = this;
 	initPtr = par;
 
@@ -1197,6 +1200,8 @@ HRESULT WINAPI d912pxy_device::SetTexture(DWORD Stage, IDirect3DBaseTexture9* pT
 	mTextureState.dirty |= (1 << (Stage >> 2));
 	mTextureState.texHeapID[Stage] = (UINT32)srvId;
 
+	tmpTextureTrack[Stage] = pTexture;
+
 #ifdef TRACK_SHADER_BUGS_PROFILE
 	if (pTexture)
 	{
@@ -1273,6 +1278,16 @@ HRESULT WINAPI d912pxy_device::DrawIndexedPrimitive(D3DPRIMITIVETYPE PrimitiveTy
 		return D3D_OK;
 	}
 #endif
+
+	for (int i = 0; i != 32; ++i)
+		if (tmpTextureTrack[i])
+		{
+			UINT64 srvId = *(UINT64*)((intptr_t)tmpTextureTrack[i] - 0x8);
+			if (srvId & 0x100000000)
+			{
+				srvId = tmpTextureTrack[i]->GetPriority();
+			}
+		}
 
 	d912pxy_s(iframe)->CommitBatch(PrimitiveType, BaseVertexIndex, MinVertexIndex, NumVertices, startIndex, primCount);
 

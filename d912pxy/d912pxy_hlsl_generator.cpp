@@ -1852,7 +1852,7 @@ void d912pxy_hlsl_generator::ProcSIO_REP(DWORD * op)
 	HLSL_GEN_WRITE_PROC("{ ");
 	++procIdent;
 	HLSL_GEN_WRITE_PROC("int loopStartCounter%u = %s;", procIdent, counter.t);
-	HLSL_GEN_WRITE_PROC("[loop]");	
+	//HLSL_GEN_WRITE_PROC("[loop]");	
 	HLSL_GEN_WRITE_PROC("while (loopStartCounter%u > 0)", procIdent);
 	HLSL_GEN_WRITE_PROC("{");
 	++procIdent;

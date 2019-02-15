@@ -214,7 +214,7 @@ void d912pxy_device::InitNullSRV()
 	for (int i = 0; i != 6; ++i)
 	{
 		mNullTexture->GetLayer(0, i)->LockRect(&lr, 0, i);
-		*(UINT32*)lr.pBits = 0xFF000000;
+		*(UINT32*)lr.pBits = 0xFFFFFFFF;
 		mNullTexture->GetLayer(0, i)->UnlockRect();
 	}
 

@@ -121,8 +121,9 @@ float dx9_alphatest_emulation_proc(uint data, float avf)
 	if (data & 1)
 	{	
 		uint func = (data >> 1) & 0xF;
-		uint ref = ((data >> 5) & 0xFF);
-		uint av = avf * 255;
+		uint refi = ((data >> 5) & 0xFF);
+		float ref = refi * 1.0;
+		float av = avf * 255.0;
 		bool cmpRet = true;
 		
 		if (func == 1)

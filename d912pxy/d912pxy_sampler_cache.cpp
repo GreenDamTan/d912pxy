@@ -38,7 +38,7 @@ d912pxy_sampler_cache::d912pxy_sampler_cache(d912pxy_device* dev, d912pxy_dheap*
 
 	for (int i = 0; i != PXY_INNER_MAX_API_SAMPLERS; ++i)
 	{
-		samplers[i].ComparisonFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		samplers[i].ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 		samplers[i].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		samplers[i].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		samplers[i].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
